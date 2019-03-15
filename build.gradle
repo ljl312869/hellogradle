@@ -1,0 +1,195 @@
+import javax.tools.JavaCompiler
+
+group 'maxwoods.sample'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    ext {
+        springBootVersion = '2.0.4.RELEASE'
+    }
+    repositories {
+        maven{ url "http://repo.log56.com/nexus2/content/groups/public/" }
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("org.hidetake:gradle-ssh-plugin:2.9.0")
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.2"
+    }
+}
+apply plugin: "org.hidetake.ssh"
+apply plugin: 'java'
+//加入插件application
+apply plugin: 'application'
+apply plugin: "jacoco"
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'org.sonarqube'
+
+//指定了启动类mainClassName,刷新Gradle,会多出application的task,"run"双击即可运行
+mainClassName='maxwoods.sample.test1'
+
+//sourceCompatibility = 1.8
+//更改JDK为指定的编译版本为1.7
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+repositories {
+    //Gradle会尝试先从本地Maven缓存中获取jar包，这样会更快一些
+    mavenLocal()
+    maven{ url "http://repo.log56.com/nexus2/content/groups/public/"}
+    //使用Maven的容器获取依赖
+    mavenCentral()
+    //maven{url "http://maven.aliyun.com/nexus/content/groups/public/"}
+}
+
+jacoco {
+    toolVersion = "0.7.7.201606060606"
+}
+test {
+    include '**/XTest*.class'
+    jvmArgs +=["-Xms512M"]
+}
+
+//使用UTF-8编码，为了避免编译的问题，我们全部使用UTF-8编码
+//tasks.withType(JavaCompiler){
+//    options.encoding='UTF-8'
+//}
+configurations {
+    compile.exclude group: 'ch.qos.logback', module: 'logback-classic'
+    compile.exclude module: 'log4j-to-slf4j'
+    compile.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectVersion", project.version + "_" + new Date().format('yyyyMMddHHmmss')
+    }
+}
+
+ext {
+    springCloudVersion = 'Finchley.SR1'
+}
+
+dependencies {
+    //compile表示编译时依赖
+    compile group: 'org.apache.commons',name: 'commons-lang3',version: '3.0'
+    compile('org.mybatis.spring.boot:mybatis-spring-boot-starter:1.3.2')
+    compile('org.springframework.boot:spring-boot-starter-log4j2')
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile("com.wtyt.jars:ojdbc14:1.0")
+    compile('org.apache.commons:commons-lang3:3.4')
+    compile('com.alibaba:druid:1.0.18')
+    compile group: 'commons-httpclient', name: 'commons-httpclient', version: '3.1'
+    compile('com.ctrip.framework.apollo:apollo-client:0.10.2')
+    compile group: 'com.alibaba', name: 'fastjson', version: '1.2.49'
+    compile group: 'net.sf.json-lib', name: 'json-lib', version: '2.4', classifier: 'jdk15'
+    compile('org.springframework.cloud:spring-cloud-starter-netflix-eureka-server')
+    compile('org.springframework.cloud:spring-cloud-starter-feign:1.4.5.RELEASE')
+    //testCompile表示执行单元测试时的编译的依赖
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile('org.jmockit:jmockit:1.16')
+    testCompile('jexcelapi:jxl:2.6')
+    testCompile('junit:junit:4.12')
+    testCompile('cglib:cglib:2.2')
+}
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+ssh.settings {
+    knownHosts = allowAnyHosts
+}
+
+def classesMain = "build/classes/java/main"
+def resourcesMain = "build/resources/main"
+
+task copyLibs(type: Copy) {
+    from configurations.testCompile
+    into 'build/libs/dependencies/'
+}
+
+task makeChangeFiles(type:Exec) {
+    workingDir project.rootDir
+    commandLine "cmd","/c","git log --since \"${startTime}\" --name-only --pretty=format:\"\"> \"${project.rootDir}/build/changes.txt\""
+}
+
+task incrpack(dependsOn:classes) << {
+    new File("${project.rootDir}/build/incrpack/${project.name}").deleteDir()
+    // 文件列表
+    def fl = []
+    // 获取改动的文件列表
+    new File("${project.rootDir}/build/changes.txt").eachLine("utf8") {
+        if(it.startsWith("WebRoot")){
+            fl.add(it)
+        }else if(it.startsWith("src")){
+            println it
+            if(it.endsWith("java")){
+                fl.add(classesMain+it.substring(13,it.lastIndexOf("."))+".class")
+            }else{
+                fl.add(resourcesMain+it.substring(18))
+            }
+        }
+    }
+    // 把class文件内部类的改动文件添加到文件列表
+    def inner = []
+    fl.each {
+        if(!it.endsWith(".class")){
+            return;
+        }
+        def clsn = it.substring(it.lastIndexOf("/")+1,it.lastIndexOf("."))
+        def nameFilter=/^${clsn}\$\w*.class$/
+        def clsnprefix = it.substring(0,it.lastIndexOf("/"))
+        def files = new File("${project.rootDir}/"+clsnprefix)
+        if(files.exists()){
+            files.eachFileRecurse {
+                if(it.name.matches(nameFilter)){
+                    inner.add(clsnprefix+'/'+it.name)
+                }
+            }
+        }
+    }
+    fl.addAll(inner);
+    fl = fl.unique();
+    fl.each{
+        println it
+        def dst = "${project.rootDir}/build/incrpack/${project.name}/"
+        if(it.startsWith("WebRoot")){
+            dst +=it.substring(8)
+        }else if(it.startsWith(classesMain)){
+            dst = dst+"WEB-INF/classes"+it.substring(classesMain.length())
+        }else if(it.startsWith(resourcesMain)){
+            dst = dst+"WEB-INF/classes"+it.substring(resourcesMain.length())
+        }
+        def srcFile = new File("${project.rootDir}/"+it);
+        if(!srcFile.exists()){
+            return
+        }
+        def file = new File(dst.substring(0,dst.lastIndexOf("/")))
+        if(!file.exists()){
+            file.mkdirs()
+        }
+        def fout = new FileOutputStream(dst)
+        def fin = new FileInputStream("${project.rootDir}/"+it)
+        def tmp = new byte[4096]
+        def len = -1
+        while((len=fin.read(tmp))!=-1){
+            fout.write(tmp,0,len)
+        }
+        fout.flush()
+        fout.close()
+        fin.close()
+    }
+    def afpw = new File("${project.rootDir}/build/incrpack/${project.name}/addFiles.txt");
+    fl.each{
+        afpw.createNewFile()
+        afpw.withWriterAppend { w ->
+            w.write(it);
+            w.write("\n");
+        }
+    }
+}
