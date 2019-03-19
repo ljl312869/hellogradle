@@ -1,6 +1,6 @@
-package maxwoods.sample.util;
+package wtyt.sample.util;
 
-import maxwoods.sample.util.base.BaseException;
+import wtyt.sample.util.base.BaseException;
 import org.apache.commons.lang.StringUtils;
 
 

@@ -1,4 +1,4 @@
-package maxwoods.sample.util.base;
+package wtyt.sample.util.base;
 
 public class BaseException extends Exception {
     /**
