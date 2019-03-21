@@ -1,4 +1,4 @@
-package javadesignmode.simpleFactory;
+package javadesignmode.simplefactory;
 
 /**
  * @Description: 发送邮件的实现类
@@ -8,6 +8,6 @@ package javadesignmode.simpleFactory;
 public class MailSender implements Sender {
     @Override
     public void Send() {
-        System.out.println("this is ams sender");
+        System.out.println("this is mail sender");
     }
 }
