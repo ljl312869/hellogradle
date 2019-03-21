@@ -12,5 +12,10 @@ public class MoreMethodSendFactoryTest {
         mailSender.send();
         Sender smsSender = m.productSms();
         smsSender.send();
+
+        Sender mailSender2 = m.productMail();
+
+        System.out.println(System.identityHashCode(mailSender));
+        System.out.println(System.identityHashCode(mailSender2));
     }
 }
