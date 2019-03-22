@@ -1,9 +1,9 @@
-package javadesignmode.staticfactory;
+package javadesignmode.factorymethod.moremethodfactory;
 
 /**
- * @Description: java类作用描述
+ * @Description: 短信发送的实现类
  * @Author: lijunlei
- * @CreateDate: 2019/3/21 14:00
+ * @CreateDate: 2019/3/21 11:37
  */
 public class SmsSender implements Sender {
     @Override

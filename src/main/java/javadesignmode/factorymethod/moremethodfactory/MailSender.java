@@ -1,4 +1,4 @@
-package javadesignmode.moremethodfactory;
+package javadesignmode.factorymethod.moremethodfactory;
 
 /**
  * @Description: 发送邮件的实现类

@@ -1,4 +1,4 @@
-package javadesignmode.staticfactory;
+package javadesignmode.factorymethod.staticfactory;
 
 /**
  * @Description: 发送邮件的类

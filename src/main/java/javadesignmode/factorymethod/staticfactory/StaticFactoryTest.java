@@ -1,4 +1,4 @@
-package javadesignmode.staticfactory;
+package javadesignmode.factorymethod.staticfactory;
 
 /**
  * @Description: java类作用描述
@@ -10,7 +10,7 @@ public class StaticFactoryTest {
         Sender sender = StaticFactory.productMail();
         sender.send();
         Sender sender2 = StaticFactory.productMail();
-        System.out.println(System.identityHashCode(sender));
-        System.out.println(System.identityHashCode(sender2));
+        System.out.println(sender.hashCode());
+        System.out.println(sender2.hashCode());
     }
 }

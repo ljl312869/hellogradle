@@ -1,4 +1,4 @@
-package javadesignmode.moremethodfactory;
+package javadesignmode.factorymethod.moremethodfactory;
 
 /**
  * @Description: test类
@@ -15,7 +15,7 @@ public class MoreMethodSendFactoryTest {
 
         Sender mailSender2 = m.productMail();
 
-        System.out.println(System.identityHashCode(mailSender));
-        System.out.println(System.identityHashCode(mailSender2));
+        System.out.println(mailSender.hashCode());
+        System.out.println(mailSender2.hashCode());
     }
 }

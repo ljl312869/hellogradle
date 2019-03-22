@@ -1,4 +1,4 @@
-package javadesignmode.simplefactory;
+package javadesignmode.factorymethod.simplefactory;
 
 /**
  * @Description: java类作用描述

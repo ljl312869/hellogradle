@@ -1,4 +1,4 @@
-package javadesignmode.moremethodfactory;
+package javadesignmode.factorymethod.moremethodfactory;
 
 /**
  * @Description: 多方法工厂类

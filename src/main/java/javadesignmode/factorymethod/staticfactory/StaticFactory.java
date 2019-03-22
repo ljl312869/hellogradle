@@ -1,4 +1,4 @@
-package javadesignmode.staticfactory;
+package javadesignmode.factorymethod.staticfactory;
 
 /**
  * @Description: 多个静态方法工厂类

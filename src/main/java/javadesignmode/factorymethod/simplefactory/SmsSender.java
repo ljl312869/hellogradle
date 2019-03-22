@@ -1,4 +1,4 @@
-package javadesignmode.simplefactory;
+package javadesignmode.factorymethod.simplefactory;
 
 /**
  * @Description: 发送短信的实现类
