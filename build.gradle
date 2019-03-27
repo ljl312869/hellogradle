@@ -1,4 +1,6 @@
-import javax.tools.JavaCompiler
+import org.gradle.plugins.ide.eclipse.model.Facet
+
+
 
 group 'maxwoods.sample'
 version '1.0-SNAPSHOT'
@@ -26,14 +28,20 @@ apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'org.sonarqube'
+apply plugin: 'eclipse-wtp'
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+
 
 //指定了启动类mainClassName,刷新Gradle,会多出application的task,"run"双击即可运行
 mainClassName='maxwoods.sample.test1'
 
-//sourceCompatibility = 1.8
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 //更改JDK为指定的编译版本为1.7
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+//sourceCompatibility = 1.7
+//targetCompatibility = 1.7
 
 repositories {
     //Gradle会尝试先从本地Maven缓存中获取jar包，这样会更快一些
@@ -87,6 +95,11 @@ dependencies {
     compile group: 'net.sf.json-lib', name: 'json-lib', version: '2.4', classifier: 'jdk15'
     compile('org.springframework.cloud:spring-cloud-starter-netflix-eureka-server')
     compile('org.springframework.cloud:spring-cloud-starter-feign:1.4.5.RELEASE')
+    compile  group: 'org.projectlombok', name: 'lombok', version: '1.16.22'
+    compile 'net.sf.json-lib:json-lib:2.4:jdk15'
+    compile group: 'com.alibaba', name: 'fastjson', version: '1.2.49'
+    compile group: 'net.sf.json-lib', name: 'json-lib', version: '2.4', classifier: 'jdk15'
+    compile group: 'org.json', name: 'json', version: '20160810'
     //testCompile表示执行单元测试时的编译的依赖
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile('org.springframework.boot:spring-boot-starter-test')
@@ -191,5 +204,32 @@ task incrpack(dependsOn:classes) << {
             w.write(it);
             w.write("\n");
         }
+    }
+}
+eclipse {
+    jdt {
+        sourceCompatibility = 1.6
+        targetCompatibility = 1.6
+        javaRuntimeName = "JavaSE-1.6"
+    }
+    wtp {
+        component {
+            contextPath = "/${project.name}"
+            deployName = "${project.name}"
+            resource sourcePath: 'src/', deployPath: "/WEB-INF/classes"
+            resource sourcePath: 'src/', deployPath: "/WEB-INF/classes"
+            resource sourcePath: 'WebRoot/', deployPath: "/"
+        }
+        facet {
+            facet name: 'jst.web', type: Facet.FacetType.fixed
+            facet name: 'wst.jsdt.web', type: Facet.FacetType.fixed
+            facet name: 'jst.java', type: Facet.FacetType.fixed
+            facet name: 'jst.web', version: '3.0'
+            facet name: 'jst.java', version: '1.6'
+            facet name: 'wst.jsdt.web', version: '1.0'
+        }
+    }
+    classpath {
+        defaultOutputDir = file('WebRoot/WEB-INF/classes')
     }
 }
