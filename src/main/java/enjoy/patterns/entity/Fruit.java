@@ -1,16 +1,18 @@
-package enjoy.patterns.create.factory.product;
+package enjoy.patterns.entity;
 
 import enjoy.patterns.action.visit.Visit;
 
 /**
- * @Author: lijunlei
- * @Date: 2019/3/28 1:14
  * @Description: 水果接口
+ * @Author: lijunlei
+ * @CreateDate: 2019/3/28 11:48
  */
 public interface Fruit {
+
     int price();
 
     void draw();
 
-    int accept(Visit visit);
+
+
 }
