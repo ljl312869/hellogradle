@@ -28,6 +28,6 @@ public class Banana implements Fruit{
 
     @Override
     public void draw() {
-        System.out.println("仙人蕉");
+        System.out.print("仙人蕉");
     }
 }

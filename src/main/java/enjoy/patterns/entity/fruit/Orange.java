@@ -35,6 +35,6 @@ public class Orange implements Fruit{
 
     @Override
     public void draw() {
-        System.out.println("砂糖桔");
+        System.out.print("砂糖桔");
     }
 }

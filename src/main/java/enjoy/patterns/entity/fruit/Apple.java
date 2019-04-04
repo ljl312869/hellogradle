@@ -23,7 +23,7 @@ public class Apple implements Fruit {
 
     @Override
     public void draw() {
-        System.out.println("富士康苹果");
+        System.out.print("富士康苹果");
     }
 
 
