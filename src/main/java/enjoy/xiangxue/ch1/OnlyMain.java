@@ -11,6 +11,7 @@ import java.lang.management.ThreadMXBean;
  */
 public class OnlyMain {
     public static void main(String[] args) {
+        //虚拟机线程管理的接口
         ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
         for (ThreadInfo threadInfo:threadMXBean.dumpAllThreads(false,false)) {
             System.out.println(threadInfo.getThreadId()+" ： "+threadInfo.getThreadName());
