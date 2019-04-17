@@ -11,9 +11,8 @@ import java.util.concurrent.*;
  * @CreateDate: 2019/4/17 8:52
  */
 public class NewThread {
-    /**
-     * 扩展Thread类
-     */
+
+    /** 扩展Thread类*/
     private static class ExtendsThread extends  Thread{
 
         @Override
@@ -29,7 +28,7 @@ public class NewThread {
 
         }
     }
-
+    /**实现Runnable接口*/
     private static class ImplRunable implements Runnable{
 
         @Override
@@ -38,30 +37,32 @@ public class NewThread {
         }
     }
 
-    private static class ImplCallable implements Callable<String> {
+    /**实现Callable<>接口*/
+    private static class ImplCallable implements Callable<Integer> {
         @Override
-        public String call() throws Exception {
+        public Integer call() throws Exception {
             System.out.println("I am implements Callable<>");
-            return "CallableResult";
+            return 10010;
         }
     }
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-        ExtendsThread extendsThread = new ExtendsThread();
-        extendsThread.start();
-
+        //java本身就是多线程的
         ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
         ThreadInfo[] threadInfos = threadMXBean.dumpAllThreads(false, false);
         for (ThreadInfo threadInfo:
-             threadInfos) {
+                threadInfos) {
             System.out.println(threadInfo.getThreadId()+" : "+threadInfo.getThreadName());
         }
+        //创建线程的三种方式
+        ExtendsThread extendsThread = new ExtendsThread();
+        extendsThread.start();
 
         ImplRunable implRunable=new ImplRunable();
         new Thread(implRunable).start();
 
         ImplCallable implCallable=new ImplCallable();
-        FutureTask<String> futureTask = new FutureTask<>(implCallable);
+        FutureTask<Integer> futureTask = new FutureTask<Integer>(implCallable);
         new Thread(futureTask).start();
         System.out.println(futureTask.get());
 
