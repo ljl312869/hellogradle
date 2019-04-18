@@ -6,7 +6,10 @@ import java.lang.management.ThreadMXBean;
 import java.util.concurrent.*;
 
 /**
- * @Description: 创建线程的三种方式
+ * @Description:
+ *  There are two ways to create a new thread of execution.
+ *  One is to declare a class to be a subclass of <code>Thread</code>.
+ *  The other way to create a thread is to declare a class that implements the <code>Runnable</code> interface.
  * @Author: lijunlei
  * @CreateDate: 2019/4/17 8:52
  */
@@ -29,6 +32,7 @@ public class NewThread {
         }
     }
     /**实现Runnable接口*/
+    //runnable 只是一个任务执行而已，如果自己定义可以是run可以是run1是啥都行，最终启动的还是thread
     private static class ImplRunable implements Runnable{
 
         @Override
