@@ -100,6 +100,7 @@ dependencies {
     compile group: 'com.alibaba', name: 'fastjson', version: '1.2.49'
     compile group: 'net.sf.json-lib', name: 'json-lib', version: '2.4', classifier: 'jdk15'
     compile group: 'org.json', name: 'json', version: '20160810'
+    compile('com.wtyt.jars:lgms_post:RC.2.01')
     //testCompile表示执行单元测试时的编译的依赖
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile('org.springframework.boot:spring-boot-starter-test')

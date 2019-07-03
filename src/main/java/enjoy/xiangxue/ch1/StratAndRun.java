@@ -27,7 +27,7 @@ public class StratAndRun {
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                   // e.printStackTrace();
                 }
                 System.out.println("I am "+Thread.currentThread().getName()+" and now the i="+i--);
             }
@@ -37,7 +37,9 @@ public class StratAndRun {
 
     public static void main(String[] args) {
         ThreadRun threadRun=new ThreadRun();
-        threadRun.run();
-        threadRun.run();
+        threadRun.setName("threadRun");
+        threadRun.start();
+        //threadRun.run();
+        System.out.println("<<<<<<<<<<<>>>>>>>>>>>>>>>>");
     }
 }
