@@ -30,10 +30,14 @@ public class NewThread {
     }
 
     public static void main(String[] args) {
+        testCreateMethod();
+    }
+
+    private static void testCreateMethod() {
         UseRunnable useRunnable=new UseRunnable();
         Thread thread=new Thread(useRunnable);
         thread.start();
-        thread.start();
+        //thread.start();
 
         new UseThread().start();
     }

@@ -38,8 +38,8 @@ public class StratAndRun {
     public static void main(String[] args) {
         ThreadRun threadRun=new ThreadRun();
         threadRun.setName("threadRun");
-        threadRun.start();
-        //threadRun.run();
+        //threadRun.start();
+        threadRun.run();
         System.out.println("<<<<<<<<<<<>>>>>>>>>>>>>>>>");
     }
 }

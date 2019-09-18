@@ -5,6 +5,7 @@ import com.wtyt.qst.lgms.bean.LgmsPostBuilder;
 import com.wtyt.qst.lgms.util.LgmsInit;
 import com.wtyt.qst.lgms.util.LgmsUtil;
 import net.sf.json.JSONArray;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -33,14 +34,7 @@ public class MicserverFormalTest {
 	 * 【2501】查询ETC卡信息列表之无分页版本
 	 */
 	private static void test2501(){
-		org.json.JSONObject dataJsObj = new org.json.JSONObject();
-		JSONArray ja=new JSONArray();
-		org.json.JSONObject js = new org.json.JSONObject();
-		js.put("driverMobileNo","13560399124");
-		js.put("isBind","0");
-		js.put("oilType","7");
-		ja.add(js);
-		dataJsObj.put("queryRules",ja);
+		JSONObject dataJsObj = new JSONObject("{\"queryRules\":[{\"etcCardType\":\"2\",\"state\":3,\"driverCarNo\":\"鲁RC7815\"},{\"etcCardType\":\"2\",\"state\":3,\"driverCarNo\":\"冀FD3086\"},{\"etcCardType\":\"2\",\"state\":3,\"driverCarNo\":\"鲁RC2561\"},{\"etcCardType\":\"2\",\"state\":3,\"driverCarNo\":\"鲁RH1512\"},{\"etcCardType\":\"2\",\"state\":3,\"driverCarNo\":\"鲁PE8235\"},{\"etcCardType\":\"2\",\"state\":3,\"driverCarNo\":\"鲁RC2561\"},{\"etcCardType\":\"2\",\"state\":3,\"driverCarNo\":\"鲁RC7815\"},{\"etcCardType\":\"2\",\"state\":3,\"driverCarNo\":\"鲁A915YE\"},{\"etcCardType\":\"2\",\"state\":3,\"driverCarNo\":\"鲁H17A07\"},{\"etcCardType\":\"2\",\"state\":3,\"driverCarNo\":\"冀FL2792\"},{\"etcCardType\":\"2\",\"state\":3,\"driverCarNo\":\"冀FL2792\"},{\"etcCardType\":\"2\",\"state\":3,\"driverCarNo\":\"鲁RC7815\"},{\"etcCardType\":\"2\",\"state\":3,\"driverCarNo\":\"冀FD3086\"},{\"etcCardType\":\"2\",\"state\":3,\"driverCarNo\":\"鲁A915YE\"},{\"etcCardType\":\"2\",\"state\":3,\"driverCarNo\":\"鲁A915YE\"}]}\n");
 		LgmsPostBean postBean = LgmsPostBuilder.builder("2501", dataJsObj).addUniqueId().build();
 		System.out.println(LgmsUtil.postLgms(postBean));
 	}

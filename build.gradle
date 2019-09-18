@@ -10,7 +10,13 @@ buildscript {
         springBootVersion = '2.0.4.RELEASE'
     }
     repositories {
-        maven{ url "http://repo.log56.com/nexus2/content/groups/public/" }
+        maven {
+            url 'https://repo.log56.com/nexus3/repository/maven-public/'
+            credentials {
+                username "log56repo"
+                password "log56repo!@#*("
+            }
+        }
         mavenCentral()
     }
     dependencies {
@@ -46,7 +52,13 @@ targetCompatibility = 1.8
 repositories {
     //Gradle会尝试先从本地Maven缓存中获取jar包，这样会更快一些
     mavenLocal()
-    maven{ url "http://repo.log56.com/nexus2/content/groups/public/"}
+    maven {
+        url 'https://repo.log56.com/nexus3/repository/maven-public/'
+        credentials {
+            username "log56repo"
+            password "log56repo!@#*("
+        }
+    }
     //使用Maven的容器获取依赖
     mavenCentral()
     //maven{url "http://maven.aliyun.com/nexus/content/groups/public/"}
